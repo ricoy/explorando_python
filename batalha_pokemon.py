@@ -1,4 +1,5 @@
 import random
+from abc import ABC, abstractmethod
 
 '''
 Escrevi este programa para explorar alguns recursos da linguagem Python
@@ -13,7 +14,7 @@ __author__ = "Rodrigo Ricoy Marques"
 '''
 Classe responsavel por definir os atributos e metodos padroes de um Pokemon
 '''
-class Pokemon:
+class Pokemon(ABC):
     def __init__(self, nome_pokemon, ataque, defesa):
         self.nome = nome_pokemon
         self.ataque = ataque
@@ -24,8 +25,9 @@ class Pokemon:
         self.defesa -= forca_ataque
         return self.defesa
     
+    @abstractmethod
     def golpe_especial(self):
-        print('{}[!] ataque especial:'.format(self.nome))
+        pass
         
     def encher_energia_golpe_especial(self):
         self.energia_golpe_especial += 2
