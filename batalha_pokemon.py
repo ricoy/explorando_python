@@ -16,55 +16,67 @@ Classe responsavel por definir os atributos e metodos padroes de um Pokemon
 '''
 class Pokemon(ABC):
     def __init__(self, nome_pokemon, ataque, defesa):
-        self.nome = nome_pokemon
-        self.ataque = ataque
-        self.defesa = defesa
-        self.energia_golpe_especial = 0
+        self.__nome = nome_pokemon
+        self.__ataque = ataque
+        self.__defesa = defesa
+        self.__energia_golpe_especial = 0
+    
+    @property
+    def nome(self):
+        return self.__nome
+
+    @property
+    def ataque(self):
+        return self.__ataque
+
+    @property
+    def defesa(self):
+        return self.__defesa          
     
     def atualizar_dano(self, forca_ataque):
-        self.defesa -= forca_ataque
-        return self.defesa
+        self.__defesa -= forca_ataque
+        return self.__defesa
     
     @abstractmethod
     def golpe_especial(self):
         pass
         
     def encher_energia_golpe_especial(self):
-        self.energia_golpe_especial += 2
+        self.__energia_golpe_especial += 2
     
     def defender(self):
         return (random.randint(0, 1) == 1)
     
     def atacar(self, pokemon_adversario):
         adversario_defendeu = pokemon_adversario.defender()
-        dano = self.ataque
+        dano = self.__ataque
         
         self.encher_energia_golpe_especial()
         
         if (not adversario_defendeu):
-            possui_golpe_especial = (self.energia_golpe_especial == 10)
+            possui_golpe_especial = (self.__energia_golpe_especial == 10)
             
             if (possui_golpe_especial):
-                dano += self.energia_golpe_especial
-                self.energia_golpe_especial = 0
+                dano += self.__energia_golpe_especial
+                self.__energia_golpe_especial = 0
                 self.golpe_especial()
             else:
-                print('{}[{}/{}] atacou {}[{}/{}]'.format(self.nome, str(dano), str(self.defesa), pokemon_adversario.nome, str(pokemon_adversario.ataque), str(pokemon_adversario.defesa)))
+                print('{}[{}/{}] atacou {}[{}/{}]'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(pokemon_adversario.defesa)))
                 
             defesa_restante = pokemon_adversario.atualizar_dano(dano)
             
             ataque_foi_fatal = (defesa_restante <= 0)
         
             if (ataque_foi_fatal):
-                print('\nFim de partida\nO Pokemon {} venceu'.format(self.nome))
+                print('\nFim de partida\nO Pokemon {} venceu'.format(self.__nome))
                 return True
             else:
-                print('  * {} perdeu {} pontos de defesa. {}[{}/{}]'.format(pokemon_adversario.nome, str(dano), pokemon_adversario.nome, str(pokemon_adversario.ataque), str(defesa_restante)))
+                print('  * {} perdeu {} pontos de defesa. {}[{}/{}]'.format(pokemon_adversario.__nome, str(dano), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_restante)))
                 return False
         else:
-            print('{}[{}/{}] atacou {}[{}/{}]'.format(self.nome, str(dano), str(self.defesa), pokemon_adversario.nome, str(pokemon_adversario.ataque), str(pokemon_adversario.defesa)))
+            print('{}[{}/{}] atacou {}[{}/{}]'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(pokemon_adversario.defesa)))
             
-            print('  * {} errou o golpe :-('.format(self.nome))
+            print('  * {} errou o golpe :-('.format(self.__nome))
             dano = 0
             return False
         
@@ -99,7 +111,7 @@ tudo bem q o Akuma nao eh um pokemon, mas nao podia deixar de ter ele rs
 class Akuma(Pokemon):
     def golpe_especial(self):
         super().golpe_especial()
-        print('Haaaaaaaadooouuuukeeeennnn!!!! pow pow pow puff big bang')        
+        print('Haaaaaaaadooouuuukeeeennnn!!!! pow pow pow puff big bang')
 
 '''
 Classe que controla a batalha de pokemons entre dois jogadores
