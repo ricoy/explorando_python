@@ -15,6 +15,9 @@ __author__ = "Rodrigo Ricoy Marques"
 Classe responsavel por definir os atributos e metodos padroes de um Pokemon
 '''
 class Pokemon(ABC):
+
+    ENERGIA_GOLPE_ESPECIAL = 10
+
     def __init__(self, nome_pokemon, ataque, defesa):
         self.__nome = nome_pokemon
         self.__ataque = ataque
@@ -41,44 +44,45 @@ class Pokemon(ABC):
     def golpe_especial(self):
         pass
         
-    def encher_energia_golpe_especial(self):
+    def acumular_energia_golpe_especial(self):
         self.__energia_golpe_especial += 2
     
     def defender(self):
         return (random.randint(0, 1) == 1)
     
-    def atacar(self, pokemon_adversario):
-        adversario_defendeu = pokemon_adversario.defender()
-        dano = self.__ataque
-        
-        self.encher_energia_golpe_especial()
-        
-        if (not adversario_defendeu):
-            possui_golpe_especial = (self.__energia_golpe_especial == 10)
-            
-            if (possui_golpe_especial):
-                dano += self.__energia_golpe_especial
-                self.__energia_golpe_especial = 0
-                self.golpe_especial()
+    def possui_energia_ataque_especial(self):
+        return (self.__energia_golpe_especial == self.ENERGIA_GOLPE_ESPECIAL)
+
+    def calcular_dano_ataque(self):
+        if (self.possui_energia_ataque_especial()):
+            return self.__ataque + self.__energia_golpe_especial
+        else:
+            return self.__ataque                
+
+    def atacar(self, pokemon_adversario):        
+        dano = self.calcular_dano_ataque()
+        if (not pokemon_adversario.defender()):
+            defesa_antes_ataque = pokemon_adversario.__defesa;
+            defesa_restante = pokemon_adversario.atualizar_dano(dano)            
+            if (self.possui_energia_ataque_especial()):
+                print('{}[{}/{}] atacou {}[{}/{}] com golpe especial'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_antes_ataque)))
+                self.golpe_especial()                
             else:
-                print('{}[{}/{}] atacou {}[{}/{}]'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(pokemon_adversario.defesa)))
-                
-            defesa_restante = pokemon_adversario.atualizar_dano(dano)
+                print('{}[{}/{}] atacou {}[{}/{}]'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_antes_ataque)))
             
+            self.acumular_energia_golpe_especial()            
             ataque_foi_fatal = (defesa_restante <= 0)
         
             if (ataque_foi_fatal):
                 print('\nFim de partida\nO Pokemon {} venceu'.format(self.__nome))
-                return True
+                return -1
             else:
                 print('  * {} perdeu {} pontos de defesa. {}[{}/{}]'.format(pokemon_adversario.__nome, str(dano), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_restante)))
-                return False
+                return defesa_restante
         else:
             print('{}[{}/{}] atacou {}[{}/{}]'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(pokemon_adversario.defesa)))
-            
             print('  * {} errou o golpe :-('.format(self.__nome))
-            dano = 0
-            return False
+            return 0
         
 '''
 Especializacao da classe Pokemon de um Pikachu
@@ -86,7 +90,7 @@ Especializacao da classe Pokemon de um Pikachu
 class Pikachu(Pokemon):
     def golpe_especial(self):
         super().golpe_especial()
-        print('Choque do trovao dzzzzzzzzzzzzzzz aahhhhhhhhh buuuuuuuuuuu trum cabum')
+        print('  [!] Choque do trovao dzzzzzzzzzzzzzzz aahhhhhhhhh buuuuuuuuuuu trum cabum')
 
 '''
 Especializacao da classe Pokemon de um Charizard
@@ -94,7 +98,7 @@ Especializacao da classe Pokemon de um Charizard
 class Charizard(Pokemon):
     def golpe_especial(self):
         super().golpe_especial()
-        print('Garras de dragão fuuuoooooozzzzzzz trazzzzz raaaz raaaz fuol bum')
+        print('  [!] Garras de dragão fuuuoooooozzzzzzz trazzzzz raaaz raaaz fuol bum')
 
 '''
 Especializacao da classe Pokemon de um Bulbasaur
@@ -102,7 +106,7 @@ Especializacao da classe Pokemon de um Bulbasaur
 class Bulbasaur(Pokemon):
     def golpe_especial(self):
         super().golpe_especial()
-        print('Chazam bam bim bom bum trazzzzzz kazum')
+        print('  [!] Chazam bam bim bom bum trazzzzzz kazum')
 
 '''
 Especializacao da classe Pokemon de um Akuma 
@@ -111,7 +115,7 @@ tudo bem q o Akuma nao eh um pokemon, mas nao podia deixar de ter ele rs
 class Akuma(Pokemon):
     def golpe_especial(self):
         super().golpe_especial()
-        print('Haaaaaaaadooouuuukeeeennnn!!!! pow pow pow puff big bang')
+        print('  [!] Haaaaaaaadooouuuukeeeennnn!!!! pow pow pow puff big bang')
 
 '''
 Classe que controla a batalha de pokemons entre dois jogadores
@@ -133,11 +137,11 @@ class Batalha:
         pokemon_ataque = self.pokemon_1
         pokemon_defesa = self.pokemon_2
         
-        # se o ataque de um dos jogadores nao foi fatal a luta continua, senao ha um vencedor
-        if (pokemon_ataque.atacar(pokemon_defesa) or pokemon_defesa.atacar(pokemon_ataque)): 
+        # se o ataque de um dos jogadores foi fatal fim de jogo, senao continua a briga
+        if (pokemon_ataque.atacar(pokemon_defesa) < 0 or pokemon_defesa.atacar(pokemon_ataque) < 0): 
+            return False
+        else:
             return True
-        
-        return False
 
 '''
 Classe que abstrai a criacao de pokemons
@@ -185,7 +189,7 @@ class PokemonGame:
         pokemon_usuario_2 = __class__.obter_pokemon_usuario(2)
         batalha = Batalha(pokemon_usuario_1, pokemon_usuario_2)
         while(True):
-            if (batalha.lutar()):
+            if (not batalha.lutar()):
                 break
         
 if __name__ == '__main__':
