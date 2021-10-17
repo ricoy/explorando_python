@@ -237,10 +237,4 @@ class PokemonGame:
                 break
         
 if __name__ == '__main__':
-  PokemonGame.iniciar_game()  
-
-
-        
-        
-
-
+  PokemonGame.iniciar_game()
