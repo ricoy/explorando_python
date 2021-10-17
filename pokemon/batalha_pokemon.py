@@ -17,6 +17,7 @@ Classe responsavel por definir os atributos e metodos padroes de um Pokemon
 class Pokemon(ABC):
 
     ENERGIA_GOLPE_ESPECIAL = 10
+    AUMENTO_FORCA_ATAQUE_ESPECIAL = 0.50
 
     def __init__(self, nome_pokemon, ataque, defesa):
         self.__nome = nome_pokemon
@@ -59,7 +60,7 @@ class Pokemon(ABC):
 
     def calcular_dano_ataque(self):
         if (self.possui_energia_ataque_especial()):
-            return self.__ataque + self.__energia_golpe_especial
+            return self.__ataque + int(self.__ataque * self.AUMENTO_FORCA_ATAQUE_ESPECIAL)
         else:
             return self.__ataque                
 
@@ -70,7 +71,8 @@ class Pokemon(ABC):
             defesa_restante = pokemon_adversario.atualizar_dano(dano)            
             if (self.possui_energia_ataque_especial()):
                 print('{}[{}/{}] atacou {}[{}/{}] com golpe especial'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_antes_ataque)))
-                self.golpe_especial()                
+                self.golpe_especial()
+                self.__energia_golpe_especial = 0                
             else:
                 print('{}[{}/{}] atacou {}[{}/{}]'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_antes_ataque)))
             
@@ -93,6 +95,10 @@ class Pokemon(ABC):
 Especializacao da classe Pokemon de um Pikachu
 '''
 class Pikachu(Pokemon):
+    def __init__(self, id_jogador):
+        nome_pokemon = __class__.__name__ + id_jogador
+        super().__init__(nome_pokemon, ataque = 7, defesa = 60)
+
     def golpe_especial(self):
         super().golpe_especial()
         print('  [!] Choque do trovao dzzzzzzzzzzzzzzz aahhhhhhhhh buuuuuuuuuuu trum cabum')
@@ -101,6 +107,10 @@ class Pikachu(Pokemon):
 Especializacao da classe Pokemon de um Charizard
 '''
 class Charizard(Pokemon):
+    def __init__(self, id_jogador):
+        nome_pokemon = __class__.__name__ + id_jogador
+        super().__init__(nome_pokemon, ataque = 10, defesa = 40)
+
     def golpe_especial(self):
         super().golpe_especial()
         print('  [!] Garras de dragão fuuuoooooozzzzzzz trazzzzz raaaz raaaz fuol bum')
@@ -109,6 +119,10 @@ class Charizard(Pokemon):
 Especializacao da classe Pokemon de um Bulbasaur
 '''        
 class Bulbasaur(Pokemon):
+    def __init__(self, id_jogador):
+        nome_pokemon = __class__.__name__ + id_jogador
+        super().__init__(nome_pokemon, ataque = 5, defesa = 80)
+
     def golpe_especial(self):
         super().golpe_especial()
         print('  [!] Chazam bam bim bom bum trazzzzzz kazum')
@@ -118,6 +132,10 @@ Especializacao da classe Pokemon de um Akuma
 tudo bem q o Akuma nao eh um pokemon, mas nao podia deixar de ter ele rs
 '''        
 class Akuma(Pokemon):
+    def __init__(self, id_jogador):
+        nome_pokemon = __class__.__name__ + id_jogador
+        super().__init__(nome_pokemon, ataque = 8, defesa = 50)
+
     def golpe_especial(self):
         super().golpe_especial()
         print('  [!] Haaaaaaaadooouuuukeeeennnn!!!! pow pow pow puff big bang')
@@ -127,6 +145,10 @@ Especializacao da classe Pokemon de um John Wick
 Esse eh bom de briga rs
 '''        
 class JohnWick(Pokemon):
+    def __init__(self, jogador):
+        nome_pokemon = __class__.__name__ + jogador
+        super().__init__(nome_pokemon, ataque = 11, defesa = 35)
+
     def golpe_especial(self):
         super().golpe_especial()
         print('  [!] Ahhhhhh eu to muito maluco e vou te pegar seu filho da p*!!!! pow soc puf taz bang')        
@@ -166,15 +188,15 @@ class FabricaPokemon:
     def criar_pokemon(tipo_pokemon, jogador):
         string_jogador = ' P' + str(jogador)
         if (tipo_pokemon == 1):
-            return Pikachu('Pikachu' + string_jogador, 7, 60)
+            return Pikachu(string_jogador)
         elif (tipo_pokemon == 2):
-            return Charizard('Charizard' + string_jogador, 10, 40)
+            return Charizard(string_jogador)
         elif (tipo_pokemon == 3):
-            return Bulbasaur('Bulbasaur' + string_jogador, 5, 80)
+            return Bulbasaur(string_jogador)
         elif (tipo_pokemon == 4):
-            return JohnWick('Jonh Wick' + string_jogador, 11, 35)
+            return JohnWick(string_jogador)
         elif (tipo_pokemon == 0):
-            return Akuma('Akuma' + string_jogador, 8, 50)
+            return Akuma(string_jogador)
 
         raise ValueError('Pokemon inválido')
 
@@ -187,7 +209,7 @@ zerar a defesa do outro primeiro. Animado para uma batalha? Que comecem os jogos
 '''
 class PokemonGame:
     @staticmethod
-    def obter_pokemon_usuario(jogador):                    
+    def __obter_pokemon_usuario(jogador):                    
             while(True):
                 try:
                     opcao_usuario = int(input("Jogador {}\nEscolha seu Pokemon: \n[0] - Akuma\n[1] - Pikachu\n[2] - Charizard\n[3] - Bulbasaur\n[4] - John Wick\n=> ".format(jogador)))
@@ -201,8 +223,8 @@ class PokemonGame:
     
     @staticmethod
     def iniciar_game():
-        pokemon_usuario_1 = __class__.obter_pokemon_usuario(1)
-        pokemon_usuario_2 = __class__.obter_pokemon_usuario(2)
+        pokemon_usuario_1 = PokemonGame.__obter_pokemon_usuario(1)
+        pokemon_usuario_2 = PokemonGame.__obter_pokemon_usuario(2)
         batalha = Batalha(pokemon_usuario_1, pokemon_usuario_2)
         while(True):
             if (not batalha.lutar()):
