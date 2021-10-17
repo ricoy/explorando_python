@@ -39,6 +39,7 @@ class TestPokemon(TestCase):
     def test_verifica_pokemon_morreu_pos_ataque_fatal(self):
         pikachu = Pikachu('P1')
         akuma = Akuma('P2')
+        akuma.defender = MagicMock(return_value = 0)
         akuma.atualizar_dano = MagicMock(return_value = 0)
         dano = pikachu.atacar(akuma)
         self.assertEqual(-1, dano)
