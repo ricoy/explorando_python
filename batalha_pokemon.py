@@ -123,8 +123,8 @@ class Akuma(Pokemon):
         print('  [!] Haaaaaaaadooouuuukeeeennnn!!!! pow pow pow puff big bang')
 
 '''
-Especializacao da classe Pokemon de um Akuma 
-tudo bem q o Akuma nao eh um pokemon, mas nao podia deixar de ter ele rs
+Especializacao da classe Pokemon de um John Wick 
+Esse eh bom de briga rs
 '''        
 class JonWick(Pokemon):
     def golpe_especial(self):
