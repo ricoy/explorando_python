@@ -1,4 +1,4 @@
-import random
+from random import randint
 from abc import ABC, abstractmethod
 
 '''
@@ -52,7 +52,7 @@ class Pokemon(ABC):
         self.__energia_golpe_especial += 2
     
     def defender(self):
-        return (random.randint(0, 1) == 1)
+        return (randint(0, 1) == 1)
     
     def possui_energia_ataque_especial(self):
         return (self.__energia_golpe_especial == self.ENERGIA_GOLPE_ESPECIAL)
