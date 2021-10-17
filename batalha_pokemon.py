@@ -126,7 +126,7 @@ class Akuma(Pokemon):
 Especializacao da classe Pokemon de um John Wick 
 Esse eh bom de briga rs
 '''        
-class JonWick(Pokemon):
+class JohnWick(Pokemon):
     def golpe_especial(self):
         super().golpe_especial()
         print('  [!] Ahhhhhh eu to muito maluco e vou te pegar seu filho da p*!!!! pow soc puf taz bang')        
@@ -172,7 +172,7 @@ class FabricaPokemon:
         elif (tipo_pokemon == 3):
             return Bulbasaur('Bulbasaur' + string_jogador, 5, 80)
         elif (tipo_pokemon == 4):
-            return Bulbasaur('Jonh Wick' + string_jogador, 11, 35)
+            return JohnWick('Jonh Wick' + string_jogador, 11, 35)
         elif (tipo_pokemon == 0):
             return Akuma('Akuma' + string_jogador, 8, 50)
 
