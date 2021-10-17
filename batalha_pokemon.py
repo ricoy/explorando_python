@@ -41,7 +41,7 @@ class Pokemon(ABC):
             self.__defesa -= forca_ataque
         else:
             self.__defesa = 0
-            
+
         return self.__defesa
     
     @abstractmethod
@@ -123,6 +123,15 @@ class Akuma(Pokemon):
         print('  [!] Haaaaaaaadooouuuukeeeennnn!!!! pow pow pow puff big bang')
 
 '''
+Especializacao da classe Pokemon de um Akuma 
+tudo bem q o Akuma nao eh um pokemon, mas nao podia deixar de ter ele rs
+'''        
+class JonWick(Pokemon):
+    def golpe_especial(self):
+        super().golpe_especial()
+        print('  [!] Ahhhhhh eu to muito maluco e vou te pegar seu filho da p*!!!! pow soc puf taz bang')        
+
+'''
 Classe que controla a batalha de pokemons entre dois jogadores
 '''        
 class Batalha:
@@ -162,6 +171,8 @@ class FabricaPokemon:
             return Charizard('Charizard' + string_jogador, 10, 40)
         elif (tipo_pokemon == 3):
             return Bulbasaur('Bulbasaur' + string_jogador, 5, 80)
+        elif (tipo_pokemon == 4):
+            return Bulbasaur('Jonh Wick' + string_jogador, 11, 35)
         elif (tipo_pokemon == 0):
             return Akuma('Akuma' + string_jogador, 8, 50)
 
@@ -179,8 +190,8 @@ class PokemonGame:
     def obter_pokemon_usuario(jogador):                    
             while(True):
                 try:
-                    opcao_usuario = int(input("Jogador {}\nEscolha seu Pokemon: \n[1] - Pikachu\n[2] - Charizard\n[3] - Bulbasaur\n[0] - Akuma\n=> ".format(jogador)))
-                    if (opcao_usuario in [0, 1, 2, 3]):
+                    opcao_usuario = int(input("Jogador {}\nEscolha seu Pokemon: \n[1] - Pikachu\n[2] - Charizard\n[3] - Bulbasaur\n[4] - John Wick\n[0] - Akuma\n=> ".format(jogador)))
+                    if (opcao_usuario in [0, 1, 2, 3, 4]):
                         return FabricaPokemon.criar_pokemon(opcao_usuario, jogador)
                 except Exception as e:
                     print('Ops algo nao funcionou como devia...')
