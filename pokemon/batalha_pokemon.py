@@ -46,37 +46,37 @@ class Pokemon(ABC):
         return self.__defesa
     
     @abstractmethod
-    def golpe_especial(self):
+    def _golpe_especial(self):
         pass
         
-    def acumular_energia_golpe_especial(self):
+    def __acumular_energia_golpe_especial(self):
         self.__energia_golpe_especial += 2
     
     def defender(self):
         return (randint(0, 1) == 1)
     
-    def possui_energia_ataque_especial(self):
+    def __possui_energia_ataque_especial(self):
         return (self.__energia_golpe_especial == self.ENERGIA_GOLPE_ESPECIAL)
 
-    def calcular_dano_ataque(self):
-        if (self.possui_energia_ataque_especial()):
+    def __calcular_dano_ataque(self):
+        if (self.__possui_energia_ataque_especial()):
             return self.__ataque + int(self.__ataque * self.AUMENTO_FORCA_ATAQUE_ESPECIAL)
         else:
             return self.__ataque                
 
     def atacar(self, pokemon_adversario):        
-        dano = self.calcular_dano_ataque()
+        dano = self.__calcular_dano_ataque()
         if (not pokemon_adversario.defender()):
             defesa_antes_ataque = pokemon_adversario.__defesa;
             defesa_restante = pokemon_adversario.atualizar_dano(dano)            
-            if (self.possui_energia_ataque_especial()):
+            if (self.__possui_energia_ataque_especial()):
                 print('{}[{}/{}] atacou {}[{}/{}] com golpe especial'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_antes_ataque)))
-                self.golpe_especial()
+                self._golpe_especial()
                 self.__energia_golpe_especial = 0                
             else:
                 print('{}[{}/{}] atacou {}[{}/{}]'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_antes_ataque)))
             
-            self.acumular_energia_golpe_especial()            
+            self.__acumular_energia_golpe_especial()            
             ataque_foi_fatal = (defesa_restante <= 0)
         
             if (ataque_foi_fatal):
@@ -99,8 +99,8 @@ class Pikachu(Pokemon):
         nome_pokemon = __class__.__name__ + id_jogador
         super().__init__(nome_pokemon, ataque = 7, defesa = 60)
 
-    def golpe_especial(self):
-        super().golpe_especial()
+    def _golpe_especial(self):
+        super()._golpe_especial()
         print('  [!] Choque do trovao dzzzzzzzzzzzzzzz aahhhhhhhhh buuuuuuuuuuu trum cabum')
 
 '''
@@ -111,8 +111,8 @@ class Charizard(Pokemon):
         nome_pokemon = __class__.__name__ + id_jogador
         super().__init__(nome_pokemon, ataque = 10, defesa = 40)
 
-    def golpe_especial(self):
-        super().golpe_especial()
+    def _golpe_especial(self):
+        super()._golpe_especial()
         print('  [!] Garras de dragão fuuuoooooozzzzzzz trazzzzz raaaz raaaz fuol bum')
 
 '''
@@ -123,8 +123,8 @@ class Bulbasaur(Pokemon):
         nome_pokemon = __class__.__name__ + id_jogador
         super().__init__(nome_pokemon, ataque = 5, defesa = 80)
 
-    def golpe_especial(self):
-        super().golpe_especial()
+    def _golpe_especial(self):
+        super()._golpe_especial()
         print('  [!] Chazam bam bim bom bum trazzzzzz kazum')
 
 '''
@@ -136,8 +136,8 @@ class Akuma(Pokemon):
         nome_pokemon = __class__.__name__ + id_jogador
         super().__init__(nome_pokemon, ataque = 8, defesa = 50)
 
-    def golpe_especial(self):
-        super().golpe_especial()
+    def _golpe_especial(self):
+        super()._golpe_especial()
         print('  [!] Haaaaaaaadooouuuukeeeennnn!!!! pow pow pow puff big bang')
 
 '''
@@ -149,8 +149,8 @@ class JohnWick(Pokemon):
         nome_pokemon = __class__.__name__ + jogador
         super().__init__(nome_pokemon, ataque = 11, defesa = 35)
 
-    def golpe_especial(self):
-        super().golpe_especial()
+    def _golpe_especial(self):
+        super()._golpe_especial()
         print('  [!] Ahhhhhh eu to muito maluco e vou te pegar seu filho da p*!!!! pow soc puf taz bang')        
 
 '''
