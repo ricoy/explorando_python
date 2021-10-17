@@ -190,8 +190,8 @@ class PokemonGame:
     def obter_pokemon_usuario(jogador):                    
             while(True):
                 try:
-                    opcao_usuario = int(input("Jogador {}\nEscolha seu Pokemon: \n[1] - Pikachu\n[2] - Charizard\n[3] - Bulbasaur\n[4] - John Wick\n[0] - Akuma\n=> ".format(jogador)))
-                    if (opcao_usuario in [0, 1, 2, 3, 4]):
+                    opcao_usuario = int(input("Jogador {}\nEscolha seu Pokemon: \n[0] - Akuma\n[1] - Pikachu\n[2] - Charizard\n[3] - Bulbasaur\n[4] - John Wick\n=> ".format(jogador)))
+                    if (opcao_usuario >= 0 and opcao_usuario <= 4):
                         return FabricaPokemon.criar_pokemon(opcao_usuario, jogador)
                 except Exception as e:
                     print('Ops algo nao funcionou como devia...')
