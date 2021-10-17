@@ -65,9 +65,10 @@ class Pokemon(ABC):
             return self.__ataque                
 
     def atacar(self, pokemon_adversario):        
+        self.__acumular_energia_golpe_especial()
         dano = self.__calcular_dano_ataque()
         if (not pokemon_adversario.defender()):
-            defesa_antes_ataque = pokemon_adversario.__defesa;
+            defesa_antes_ataque = pokemon_adversario.defesa;
             defesa_restante = pokemon_adversario.atualizar_dano(dano)            
             if (self.__possui_energia_ataque_especial()):
                 print('{}[{}/{}] atacou {}[{}/{}] com golpe especial'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_antes_ataque)))
@@ -76,7 +77,6 @@ class Pokemon(ABC):
             else:
                 print('{}[{}/{}] atacou {}[{}/{}]'.format(self.__nome, str(dano), str(self.__defesa), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_antes_ataque)))
             
-            self.__acumular_energia_golpe_especial()            
             ataque_foi_fatal = (defesa_restante <= 0)
         
             if (ataque_foi_fatal):
