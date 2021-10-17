@@ -163,15 +163,21 @@ class Batalha:
         self.pokemon_1 = pokemon_1
         self.pokemon_2 = pokemon_2
         self.vencedor = False
-        self.rodada = 1
+        self.__rodada = 1
         
     def lutar(self):
-        print('\n[Round {}]'.format(str(self.rodada)))
+        print('\n[Round {}]'.format(str(self.__rodada)))
         
-        self.rodada += 1
+        pokemons = (self.pokemon_1, self.pokemon_2)
         
-        pokemon_ataque = self.pokemon_1
-        pokemon_defesa = self.pokemon_2
+        # adicionando mais emocao no jogo colocando o atacante e o defensor variavel em cada rodada
+        indice_pokemon_ataque = randint(0, 1)
+        indice_pokemon_defesa = 1 - indice_pokemon_ataque
+
+        self.__rodada += 1
+
+        pokemon_ataque = pokemons[indice_pokemon_ataque]
+        pokemon_defesa = pokemons[indice_pokemon_defesa]
         
         # se o ataque de um dos jogadores foi fatal fim de jogo, senao continua a briga
         if (pokemon_ataque.atacar(pokemon_defesa) < 0 or pokemon_defesa.atacar(pokemon_ataque) < 0): 
