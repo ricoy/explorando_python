@@ -37,7 +37,11 @@ class Pokemon(ABC):
         return self.__defesa          
     
     def atualizar_dano(self, forca_ataque):
-        self.__defesa -= forca_ataque
+        if (forca_ataque < self.defesa):
+            self.__defesa -= forca_ataque
+        else:
+            self.__defesa = 0
+            
         return self.__defesa
     
     @abstractmethod
@@ -74,6 +78,7 @@ class Pokemon(ABC):
             ataque_foi_fatal = (defesa_restante <= 0)
         
             if (ataque_foi_fatal):
+                print('  * {} perdeu {} pontos de defesa. {}[{}/{}]'.format(pokemon_adversario.__nome, str(dano), pokemon_adversario.__nome, str(pokemon_adversario.ataque), str(defesa_restante)))
                 print('\nFim de partida\nO Pokemon {} venceu'.format(self.__nome))
                 return -1
             else:
